@@ -6,6 +6,8 @@ import { Team } from './team/entities/team.entity';
 import { TeamMember } from './team/entities/team-member.entity';
 import { AttendanceModule } from './attendance/attendance.module';
 import { Attendance } from './attendance/entities/attendance.entity';
+import { AuthModule } from './auth/auth.module';
+import { User } from './user/user.entity';
 
 @Module({
   imports: [
@@ -22,13 +24,15 @@ import { Attendance } from './attendance/entities/attendance.entity';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [Team, TeamMember, Attendance],
+        entities: [Team, TeamMember, Attendance, User],
         synchronize: true, // auto sync DB tables (dev only)
       }),
     }),
 
     TeamModule,
-    AttendanceModule, // your custom module
+    AttendanceModule,
+    AuthModule,
+    // your custom module
   ],
 })
 export class AppModule {}

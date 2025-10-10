@@ -1,15 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 @Entity()
 export class Attendance {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn()
+  id: number; // We will generate this manually
 
   @Column()
   startTime: Date;
 
-  @Column()
-  endTime: Date;
+  @Column({ type: 'timestamp', nullable: true })
+  endTime?: Date;
 
   @Column()
   workedDuration: number;
@@ -19,4 +19,8 @@ export class Attendance {
 
   @Column()
   totalBreakDuration: number;
+
+  // ✅ Added username column (nullable to prevent errors with existing data)
+  @Column({ nullable: true })
+  username: string;
 }
