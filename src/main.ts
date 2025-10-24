@@ -4,16 +4,9 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Enable CORS for multiple origins
   app.enableCors({
-    origin: [
-      'http://localhost:3000', // local React dev
-      'https://ascentware-attend.vercel.app', // hosted React
-    ],
-    credentials: true, // if you want cookies or auth headers
+    origin: 'http://localhost:3000', // Replace with your React port
   });
-
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(8000);
 }
