@@ -5,7 +5,11 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['https://attendanceuiportal.netlify.app'],
+    origin: [
+      'http://localhost:3000',
+      'https://attendanceuiportal.netlify.app',
+      'https://attendance-ui-portal.netlify.app',
+    ],
   });
 
   app.useGlobalPipes(new ValidationPipe());
