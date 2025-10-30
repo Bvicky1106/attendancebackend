@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
 import { TeamModule } from './team/team.module';
 import { Team } from './team/entities/team.entity';
 import { TeamMember } from './team/entities/team-member.entity';
@@ -12,28 +11,28 @@ import { User } from './user/user.entity';
 
 @Module({
   imports: [
-    // Load .env globally
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true }), // loads .env globally
 
-    // ✅ TypeORM connection using Supabase DATABASE_URL
+    // async config for TypeORM (reads env dynamically)
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, AuthModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        url: config.get<string>('DATABASE_URL'), // <-- Supabase connection string
+        host: config.get<string>('DB_HOST'),
+        port: config.get<number>('DB_PORT'),
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_NAME'),
         entities: [Team, TeamMember, Attendance, User],
-        synchronize: true, // ❗ use only in dev (turn off in production)
-        ssl: {
-          rejectUnauthorized: false, // required for Supabase/Render connection
-        },
+        synchronize: true, // auto sync DB tables (dev only)
       }),
     }),
 
-    // Your app modules
     TeamModule,
     AttendanceModule,
     AuthModule,
+    // your custom module
   ],
 })
 export class AppModule {}
